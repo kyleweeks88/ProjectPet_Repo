@@ -485,15 +485,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1280213866965613740, guid: f8aae906a371c4a4db3f3012063b1493,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7633821739350261694, guid: f8aae906a371c4a4db3f3012063b1493,
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8606094138753856778, guid: f8aae906a371c4a4db3f3012063b1493,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -701,6 +701,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Launch Pad
       objectReference: {fileID: 0}
+    - target: {fileID: 6234585266117435214, guid: bb64f62a6e0f88b4e9864d19e99c0fa6,
+        type: 3}
+      propertyPath: m_TagString
+      value: Start
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -718,6 +723,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Goal Pad
+      objectReference: {fileID: 0}
+    - target: {fileID: 1169555194806443833, guid: 39974613a6ceecf41914298f9da115fa,
+        type: 3}
+      propertyPath: m_TagString
+      value: Finish
       objectReference: {fileID: 0}
     - target: {fileID: 1221514660551067208, guid: 39974613a6ceecf41914298f9da115fa,
         type: 3}
