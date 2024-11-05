@@ -2,88 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+[RequireComponent(typeof(NavMeshAgent))]
 
 public class AI_RandomMovement : MonoBehaviour
 {
-    public NavMeshAgent navAgent;
-    public float wanderRadius;
-    public float waitTime = 0f;
-    public bool destinationReached;
+    [SerializeField] float radius = 20f;
+    [SerializeField] bool debugBool;
 
-    public Transform centerPoint;
+    NavMeshAgent myAgent;
+    Vector3 nextPos;
+    Vector3 startPos;
 
     private void Start()
     {
-        navAgent = GetComponent<NavMeshAgent>();
+        myAgent = GetComponent<NavMeshAgent>();
+        nextPos = transform.position;
+        startPos = transform.position;
     }
 
     private void Update()
     {
-        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        if(Vector3.Distance(nextPos, transform.position) <= 1.5f)
         {
-            //// Wait a random amount of time (Coroutine maybe?)
-            //destinationReached = true;
-            //WaitForTime();
-            //// Pick a destination and rotate towards it, then move
-            //if (!destinationReached)
-            //{
-            //    Vector3 point;
-            //    if (RandomPoint(centerPoint.position, wanderRadius, out point))
-            //    {
-            //        Debug.DrawRay(point, Vector3.up, Color.yellow, 1.0f);
-            //        navAgent.SetDestination(point);
-            //    }
-            //}
-            
-            destinationReached = true;
-            if (destinationReached)
-            {
-                WaitForTime();
-            }
+            nextPos = RandomPointGenerator.PointGenerator(startPos, radius);
+            myAgent.SetDestination(nextPos);
         }
     }
 
-    void WaitForTime()
+    void OnDrawGizmos()
     {
-        destinationReached = false;
-
-        if (!destinationReached)
-            StartCoroutine(WaitTimer(waitTime));
-    }
-
-    IEnumerator WaitTimer(float _duration)
-    {
-        Debug.Log("TIMER START");
-        yield return new WaitForSeconds(_duration);
-        Debug.Log("TIMER END");
-
-        if (destinationReached)
+        if(debugBool == true)
         {
-            Vector3 point;
-            if (RandomPoint(centerPoint.position, wanderRadius, out point))
-            {
-                Debug.DrawRay(point, Vector3.up, Color.yellow, 1.0f);
-                navAgent.SetDestination(point);
-                Debug.Log("TEST");
-                destinationReached = false;
-
-                yield return null;
-            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, nextPos);
         }
-    }
-
-    bool RandomPoint(Vector3 center, float radius, out Vector3 result)
-    {
-        Vector3 randomPoint = center + Random.insideUnitSphere * radius; //Creates random point in sphere
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
-        {
-            // the 1.0f is the max distance
-            result = hit.position;
-            return true;
-        }
-
-        result = Vector3.zero;
-        return false;
     }
 }
