@@ -5,12 +5,15 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     Rigidbody myRigidbody;
+    AudioSource myAudioSource;
+
     public float thrustVelocity = 1f;
     public float rotationVelocity = 1f;
 
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody>();
+        myAudioSource = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -21,9 +24,14 @@ public class PlayerMove : MonoBehaviour
 
     void ProcessThrust()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             myRigidbody.AddRelativeForce(Vector3.up * thrustVelocity);
+
+            if (!myAudioSource.isPlaying)
+            {
+                myAudioSource.Play();
+            }
         }
     }
     
