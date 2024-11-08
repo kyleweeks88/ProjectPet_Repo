@@ -9,7 +9,8 @@ public class AI_RandomMovement : MonoBehaviour
     [SerializeField] float radius = 20f;
     [SerializeField] bool debugBool;
     [SerializeField] bool hasPatrolPoint;
-    [SerializeField] bool isWaiting;
+    [SerializeField] float currentWaitTime;
+    [SerializeField] float startWaitTime;
 
     NavMeshAgent myAgent;
     Vector3 nextPos;
@@ -20,6 +21,7 @@ public class AI_RandomMovement : MonoBehaviour
         myAgent = GetComponent<NavMeshAgent>();
         nextPos = transform.position;
         startPos = transform.position;
+        currentWaitTime = startWaitTime;
     }
 
     private void Update()
@@ -29,34 +31,22 @@ public class AI_RandomMovement : MonoBehaviour
 
     void RandomPatrol()
     {
-        if (!hasPatrolPoint && !isWaiting)
+        if (!hasPatrolPoint)
         {
-            StopCoroutine(WaitTimer());
             nextPos = RandomPointGenerator.GeneratePoint(startPos, radius);
             hasPatrolPoint = true;
         }
-        
+
         if (hasPatrolPoint)
         {
             myAgent.SetDestination(nextPos);
-            myAgent.Resume();
+            myAgent.isStopped = false;
             if (Vector3.Distance(nextPos, transform.position) <= myAgent.stoppingDistance)
             {
-                myAgent.Stop();
+                myAgent.isStopped = true;
                 hasPatrolPoint = false;
-                StartCoroutine(WaitTimer());
-                Debug.Log("TEST");
             }
         }
-    }
-
-    IEnumerator WaitTimer()
-    {
-        isWaiting = true;
-
-        yield return new WaitForSeconds(10f);
-
-        isWaiting = false;
     }
 
     void OnDrawGizmos()
