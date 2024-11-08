@@ -24,6 +24,7 @@ public class AI_RandomMovement : MonoBehaviour
     {
         if(Vector3.Distance(nextPos, transform.position) <= 1.5f)
         {
+            // START COROUTINE
             nextPos = RandomPointGenerator.PointGenerator(startPos, radius);
             myAgent.SetDestination(nextPos);
         }
