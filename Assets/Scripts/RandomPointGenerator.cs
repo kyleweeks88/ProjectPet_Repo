@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class RandomPointGenerator : MonoBehaviour
 {
-    public static Vector3 PointGenerator(Vector3 startPoint, float radius)
+    public static Vector3 GeneratePoint(Vector3 startPoint, float radius)
     {
         Vector3 Dir = Random.insideUnitSphere * radius;
         Dir += startPoint;

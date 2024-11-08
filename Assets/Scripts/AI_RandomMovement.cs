@@ -8,6 +8,8 @@ public class AI_RandomMovement : MonoBehaviour
 {
     [SerializeField] float radius = 20f;
     [SerializeField] bool debugBool;
+    [SerializeField] bool hasPatrolPoint;
+    [SerializeField] bool isWaiting;
 
     NavMeshAgent myAgent;
     Vector3 nextPos;
@@ -22,17 +24,44 @@ public class AI_RandomMovement : MonoBehaviour
 
     private void Update()
     {
-        if(Vector3.Distance(nextPos, transform.position) <= 1.5f)
+        RandomPatrol();
+    }
+
+    void RandomPatrol()
+    {
+        if (!hasPatrolPoint && !isWaiting)
         {
-            // START COROUTINE
-            nextPos = RandomPointGenerator.PointGenerator(startPos, radius);
-            myAgent.SetDestination(nextPos);
+            StopCoroutine(WaitTimer());
+            nextPos = RandomPointGenerator.GeneratePoint(startPos, radius);
+            hasPatrolPoint = true;
         }
+        
+        if (hasPatrolPoint)
+        {
+            myAgent.SetDestination(nextPos);
+            myAgent.Resume();
+            if (Vector3.Distance(nextPos, transform.position) <= myAgent.stoppingDistance)
+            {
+                myAgent.Stop();
+                hasPatrolPoint = false;
+                StartCoroutine(WaitTimer());
+                Debug.Log("TEST");
+            }
+        }
+    }
+
+    IEnumerator WaitTimer()
+    {
+        isWaiting = true;
+
+        yield return new WaitForSeconds(10f);
+
+        isWaiting = false;
     }
 
     void OnDrawGizmos()
     {
-        if(debugBool == true)
+        if (debugBool == true)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, nextPos);
